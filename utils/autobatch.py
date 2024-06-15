@@ -1,4 +1,4 @@
-# Ultralytics YOLOv3 🚀, AGPL-3.0 license
+# YOLOv3 🚀 by Ultralytics, AGPL-3.0 license
 """Auto-batch utils."""
 
 from copy import deepcopy
@@ -11,15 +11,13 @@ from utils.torch_utils import profile
 
 
 def check_train_batch_size(model, imgsz=640, amp=True):
-    """Checks and computes the optimal training batch size for YOLOv3, given model and image size."""
+    # Check YOLOv3 training batch size
     with torch.cuda.amp.autocast(amp):
         return autobatch(deepcopy(model).train(), imgsz)  # compute optimal batch size
 
 
 def autobatch(model, imgsz=640, fraction=0.8, batch_size=16):
-    """Estimates optimal YOLOv3 batch size using available CUDA memory; imgsz:int=640, fraction:float=0.8,
-    batch_size:int=16.
-    """
+    # Automatically estimate best YOLOv3 batch size to use `fraction` of available CUDA memory
     # Usage:
     #     import torch
     #     from utils.autobatch import autobatch

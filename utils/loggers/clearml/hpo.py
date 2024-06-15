@@ -1,5 +1,3 @@
-# Ultralytics YOLOv3 🚀, AGPL-3.0 license
-
 from clearml import Task
 
 # Connecting ClearML with the current process,

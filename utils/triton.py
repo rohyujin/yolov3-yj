@@ -1,4 +1,4 @@
-# Ultralytics YOLOv3 🚀, AGPL-3.0 license
+# YOLOv3 🚀 by Ultralytics, AGPL-3.0 license
 """Utils to interact with the Triton Inference Server."""
 
 import typing
@@ -71,9 +71,6 @@ class TritonRemoteModel:
         return result[0] if len(result) == 1 else result
 
     def _create_inputs(self, *args, **kwargs):
-        """Generates model inputs from args or kwargs, not allowing both; raises error if neither or both are
-        provided.
-        """
         args_len, kwargs_len = len(args), len(kwargs)
         if not args_len and not kwargs_len:
             raise RuntimeError("No inputs provided.")

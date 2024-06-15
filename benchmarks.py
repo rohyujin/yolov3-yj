@@ -1,4 +1,4 @@
-# Ultralytics YOLOv3 🚀, AGPL-3.0 license
+# YOLOv3 🚀 by Ultralytics, AGPL-3.0 license
 """
 Run YOLOv3 benchmarks on all supported export formats.
 
@@ -149,9 +149,6 @@ def test(
 
 
 def parse_opt():
-    """Parses command line arguments for model inference configurations, including weights, image size, and device
-    options.
-    """
     parser = argparse.ArgumentParser()
     parser.add_argument("--weights", type=str, default=ROOT / "yolov3-tiny.pt", help="weights path")
     parser.add_argument("--imgsz", "--img", "--img-size", type=int, default=640, help="inference size (pixels)")
@@ -169,7 +166,6 @@ def parse_opt():
 
 
 def main(opt):
-    """Executes tests or main pipeline on provided options, determining behavior based on `opt.test`."""
     test(**vars(opt)) if opt.test else run(**vars(opt))
 
 

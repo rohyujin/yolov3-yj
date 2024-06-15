@@ -1,4 +1,4 @@
-# Ultralytics YOLOv3 🚀, AGPL-3.0 license
+# YOLOv3 🚀 by Ultralytics, AGPL-3.0 license
 """
 Validate a trained YOLOv3 segment model on a segment dataset.
 
@@ -71,7 +71,7 @@ from utils.torch_utils import de_parallel, select_device, smart_inference_mode
 
 
 def save_one_txt(predn, save_conf, shape, file):
-    """Saves detection results in normalized xywh format (with optional confidence) to a txt file."""
+    # Save one txt result
     gn = torch.tensor(shape)[[1, 0, 1, 0]]  # normalization gain whwh
     for *xyxy, conf, cls in predn.tolist():
         xywh = (xyxy2xywh(torch.tensor(xyxy).view(1, 4)) / gn).view(-1).tolist()  # normalized xywh
@@ -81,7 +81,7 @@ def save_one_txt(predn, save_conf, shape, file):
 
 
 def save_one_json(predn, jdict, path, class_map, pred_masks):
-    """Saves detection results in COCO JSON format, including bbox, category_id and segmentation if available."""
+    # Save one JSON result {"image_id": 42, "category_id": 18, "bbox": [258.15, 41.29, 348.26, 243.78], "score": 0.236}
     from pycocotools.mask import encode
 
     def single_encode(x):
@@ -437,7 +437,6 @@ def run(
 
 
 def parse_opt():
-    """Parses and validates command-line arguments for configuring model training or inference."""
     parser = argparse.ArgumentParser()
     parser.add_argument("--data", type=str, default=ROOT / "data/coco128-seg.yaml", help="dataset.yaml path")
     parser.add_argument("--weights", nargs="+", type=str, default=ROOT / "yolov5s-seg.pt", help="model path(s)")
@@ -470,9 +469,6 @@ def parse_opt():
 
 
 def main(opt):
-    """Executes the primary function based on task, including training, validation, testing, speed, and study
-    benchmarks.
-    """
     check_requirements(ROOT / "requirements.txt", exclude=("tensorboard", "thop"))
 
     if opt.task in ("train", "val", "test"):  # run normally

@@ -1,4 +1,4 @@
-# Ultralytics YOLOv3 🚀, AGPL-3.0 license
+# YOLOv3 🚀 by Ultralytics, AGPL-3.0 license
 """
 Run YOLOv3 detection inference on images, videos, directories, globs, YouTube, webcam, streams, etc.
 
@@ -68,8 +68,8 @@ from utils.torch_utils import select_device, smart_inference_mode
 @smart_inference_mode()
 def run(
     weights=ROOT / "yolov5s.pt",  # model path or triton URL
-    source=ROOT / "data/images",  # file/dir/URL/glob/screen/0(webcam)
-    data=ROOT / "data/coco128.yaml",  # dataset.yaml path
+    source=ROOT / "data/images",  # file/dir/URL/glob/screen/0(webcam)##########
+    data=ROOT / "data/coco128.yaml",  # dataset.yaml path#######################
     imgsz=(640, 640),  # inference size (height, width)
     conf_thres=0.25,  # confidence threshold
     iou_thres=0.45,  # NMS IOU threshold
@@ -232,7 +232,6 @@ def run(
 
 
 def parse_opt():
-    """Parses and returns command-line options for model inference configurations."""
     parser = argparse.ArgumentParser()
     parser.add_argument(
         "--weights", nargs="+", type=str, default=ROOT / "yolov3-tiny.pt", help="model path or triton URL"
@@ -270,7 +269,6 @@ def parse_opt():
 
 
 def main(opt):
-    """Entry point for running the model; checks requirements and calls `run` with parsed options."""
     check_requirements(ROOT / "requirements.txt", exclude=("tensorboard", "thop"))
     run(**vars(opt))
 

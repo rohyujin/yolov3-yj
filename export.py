@@ -1,4 +1,4 @@
-# Ultralytics YOLOv3 🚀, AGPL-3.0 license
+# YOLOv3 🚀 by Ultralytics, AGPL-3.0 license
 """
 Export a YOLOv3 PyTorch model to other formats. TensorFlow exports authored by https://github.com/zldrobit
 
@@ -92,7 +92,6 @@ MACOS = platform.system() == "Darwin"  # macOS environment
 
 class iOSModel(torch.nn.Module):
     def __init__(self, model, im):
-        """Initializes an iOSModel with normalized input dimensions and number of classes from a torch model."""
         super().__init__()
         b, c, h, w = im.shape  # batch, channel, height, width
         self.model = model
@@ -105,13 +104,12 @@ class iOSModel(torch.nn.Module):
             # self.normalize = torch.tensor([1. / w, 1. / h, 1. / w, 1. / h]).expand(np, 4)  # explicit (faster, larger)
 
     def forward(self, x):
-        """Performs forward pass, returns scaled confidences and normalized coordinates given input tensor `x`."""
         xywh, conf, cls = self.model(x)[0].squeeze().split((4, 1, self.nc), 1)
         return cls * conf, xywh * self.normalize  # confidence (3780, 80), coordinates (3780, 4)
 
 
 def export_formats():
-    """Lists supported YOLOv3 model export formats including file suffixes and CPU/GPU compatibility."""
+    # YOLOv3 export formats
     x = [
         ["PyTorch", "-", ".pt", True, True],
         ["TorchScript", "torchscript", ".torchscript", True, True],
@@ -130,7 +128,7 @@ def export_formats():
 
 
 def try_export(inner_func):
-    """Decorator to profile and log the export process of YOLOv3 models, handling successes and failures."""
+    # YOLOv3 export decorator, i..e @try_export
     inner_args = get_default_args(inner_func)
 
     def outer_func(*args, **kwargs):
@@ -149,11 +147,7 @@ def try_export(inner_func):
 
 @try_export
 def export_torchscript(model, im, file, optimize, prefix=colorstr("TorchScript:")):
-    """
-    Exports a YOLOv3 model to TorchScript format, optionally optimizing for mobile.
-
-    Args: model, im (input image), file (path), optimize (bool).
-    """
+    # YOLOv3 TorchScript model export
     LOGGER.info(f"\n{prefix} starting export with torch {torch.__version__}...")
     f = file.with_suffix(".torchscript")
 
@@ -169,7 +163,7 @@ def export_torchscript(model, im, file, optimize, prefix=colorstr("TorchScript:"
 
 @try_export
 def export_onnx(model, im, file, opset, dynamic, simplify, prefix=colorstr("ONNX:")):
-    """Exports a YOLOv3 model to ONNX format with dynamic shapes and simplification options."""
+    # YOLOv3 ONNX export
     check_requirements("onnx>=1.12.0")
     import onnx
 
@@ -291,9 +285,7 @@ def export_openvino(file, metadata, half, int8, data, prefix=colorstr("OpenVINO:
 
 @try_export
 def export_paddle(model, im, file, metadata, prefix=colorstr("PaddlePaddle:")):
-    """Exports a YOLOv3 model to PaddlePaddle format using X2Paddle, saving to `file` directory with metadata in
-    yaml.
-    """
+    # YOLOv3 Paddle export
     check_requirements(("paddlepaddle", "x2paddle"))
     import x2paddle
     from x2paddle.convert import pytorch2paddle
@@ -308,7 +300,7 @@ def export_paddle(model, im, file, metadata, prefix=colorstr("PaddlePaddle:")):
 
 @try_export
 def export_coreml(model, im, file, int8, half, nms, prefix=colorstr("CoreML:")):
-    """Exports YOLOv3 model to CoreML format with optional quantization and NMS; requires 'coremltools'."""
+    # YOLOv3 CoreML export
     check_requirements("coremltools")
     import coremltools as ct
 
@@ -333,11 +325,7 @@ def export_coreml(model, im, file, int8, half, nms, prefix=colorstr("CoreML:")):
 
 @try_export
 def export_engine(model, im, file, half, dynamic, simplify, workspace=4, verbose=False, prefix=colorstr("TensorRT:")):
-    """
-    Exports a YOLOv3 model to TensorRT engine format.
-
-    Nvidia TensorRT: https://developer.nvidia.com/tensorrt
-    """
+    # YOLOv3 TensorRT export https://developer.nvidia.com/tensorrt
     assert im.device.type != "cpu", "export running on CPU but must be on GPU, i.e. `python export.py --device 0`"
     try:
         import tensorrt as trt
@@ -456,11 +444,7 @@ def export_saved_model(
 
 @try_export
 def export_pb(keras_model, file, prefix=colorstr("TensorFlow GraphDef:")):
-    """
-    Exports Keras model as TensorFlow GraphDef *.pb file, compatible with YOLOv3.
-
-    See https://github.com/leimao/Frozen_Graph_TensorFlow for details.
-    """
+    # YOLOv3 TensorFlow GraphDef *.pb export https://github.com/leimao/Frozen_Graph_TensorFlow
     import tensorflow as tf
     from tensorflow.python.framework.convert_to_constants import convert_variables_to_constants_v2
 
@@ -477,7 +461,7 @@ def export_pb(keras_model, file, prefix=colorstr("TensorFlow GraphDef:")):
 
 @try_export
 def export_tflite(keras_model, im, file, int8, data, nms, agnostic_nms, prefix=colorstr("TensorFlow Lite:")):
-    """Exports a YOLOv3 model to TensorFlow Lite format, supports fp16/int8, NMS options, and custom data."""
+    # YOLOv3 TensorFlow Lite export
     import tensorflow as tf
 
     LOGGER.info(f"\n{prefix} starting export with tensorflow {tf.__version__}...")
@@ -509,11 +493,7 @@ def export_tflite(keras_model, im, file, int8, data, nms, agnostic_nms, prefix=c
 
 @try_export
 def export_edgetpu(file, prefix=colorstr("Edge TPU:")):
-    """
-    Exports YOLOv3 model to Edge TPU compatible format; requires Linux and Edge TPU compiler.
-
-    https://coral.ai/docs/edgetpu/compiler/
-    """
+    # YOLOv3 Edge TPU export https://coral.ai/docs/edgetpu/models-intro/
     cmd = "edgetpu_compiler --version"
     help_url = "https://coral.ai/docs/edgetpu/compiler/"
     assert platform.system() == "Linux", f"export only supported on Linux. See {help_url}"
@@ -551,7 +531,7 @@ def export_edgetpu(file, prefix=colorstr("Edge TPU:")):
 
 @try_export
 def export_tfjs(file, int8, prefix=colorstr("TensorFlow.js:")):
-    """Exports a YOLOv3 model to TensorFlow.js format, optionally quantizing to uint8."""
+    # YOLOv3 TensorFlow.js export
     check_requirements("tensorflowjs")
     import tensorflowjs as tfjs
 
@@ -588,7 +568,7 @@ def export_tfjs(file, int8, prefix=colorstr("TensorFlow.js:")):
 
 
 def add_tflite_metadata(file, metadata, num_outputs):
-    """Adds TFLite model metadata for enhanced model understanding and processing; requires `tflite_support`."""
+    # Add metadata to *.tflite models per https://www.tensorflow.org/lite/models/convert/metadata
     with contextlib.suppress(ImportError):
         # check_requirements('tflite_support')
         from tflite_support import flatbuffers
@@ -621,9 +601,7 @@ def add_tflite_metadata(file, metadata, num_outputs):
 
 
 def pipeline_coreml(model, im, file, names, y, prefix=colorstr("CoreML Pipeline:")):
-    """Executes YOLOv3 CoreML pipeline, handling image preprocessing, prediction, and NMS, saving the model with
-    metadata.
-    """
+    # YOLOv3 CoreML pipeline
     import coremltools as ct
     from PIL import Image
 
@@ -888,9 +866,6 @@ def run(
 
 
 def parse_opt(known=False):
-    """Parses command line arguments for model export configuration, including data paths, weights, and export
-    options.
-    """
     parser = argparse.ArgumentParser()
     parser.add_argument("--data", type=str, default=ROOT / "data/coco128.yaml", help="dataset.yaml path")
     parser.add_argument("--weights", nargs="+", type=str, default=ROOT / "yolov3-tiny.pt", help="model.pt path(s)")
@@ -925,7 +900,6 @@ def parse_opt(known=False):
 
 
 def main(opt):
-    """Executes model inference, supporting various export formats based on specified weights and options."""
     for opt.weights in opt.weights if isinstance(opt.weights, list) else [opt.weights]:
         run(**vars(opt))
 

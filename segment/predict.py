@@ -1,4 +1,4 @@
-# Ultralytics YOLOv3 🚀, AGPL-3.0 license
+# YOLOv3 🚀 by Ultralytics, AGPL-3.0 license
 """
 Run YOLOv3 segmentation inference on images, videos, directories, streams, etc.
 
@@ -257,7 +257,6 @@ def run(
 
 
 def parse_opt():
-    """Parses command-line options for YOLOv5 including model paths, source, inference size, and saving options."""
     parser = argparse.ArgumentParser()
     parser.add_argument("--weights", nargs="+", type=str, default=ROOT / "yolov5s-seg.pt", help="model path(s)")
     parser.add_argument("--source", type=str, default=ROOT / "data/images", help="file/dir/URL/glob/screen/0(webcam)")
@@ -294,7 +293,6 @@ def parse_opt():
 
 
 def main(opt):
-    """Executes model inference based on parsed options, checking requirements and excluding specified packages."""
     check_requirements(ROOT / "requirements.txt", exclude=("tensorboard", "thop"))
     run(**vars(opt))
 
